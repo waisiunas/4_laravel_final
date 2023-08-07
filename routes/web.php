@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ProfileController;
 use App\Http\Controllers\auth\AuthController;
@@ -18,13 +19,37 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [AuthController::class, 'login_view'])->name('login')->middleware(RedirectIfAuthenticated::class);
-Route::post('/', [AuthController::class, 'login'])->middleware(RedirectIfAuthenticated::class);
-Route::get('logout', [AuthController::class, 'logout'])->name('logout')->middleware(Authenticate::class);
+Route::controller(AuthController::class)->group(function () {
+    Route::middleware(RedirectIfAuthenticated::class)->group(function () {
+        Route::get('/', 'login_view')->name('login');
+        Route::post('/', 'login');
+    });
 
-Route::get('admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware(Authenticate::class);
+    Route::middleware(Authenticate::class)->group(function () {
+        Route::get('logout', 'logout')->name('logout');
+    });
+});
 
-Route::get('admin/profile/edit', [ProfileController::class, 'edit'])->name('admin.profile.edit')->middleware(Authenticate::class);
-Route::post('admin/profile/details', [ProfileController::class, 'details'])->name('admin.profile.details')->middleware(Authenticate::class);
-Route::post('admin/profile/picture', [ProfileController::class, 'picture'])->name('admin.profile.picture')->middleware(Authenticate::class);
-Route::post('admin/profile/password', [ProfileController::class, 'password'])->name('admin.profile.password')->middleware(Authenticate::class);
+Route::prefix('admin')->name('admin.')->middleware(Authenticate::class)->group(function () {
+    Route::controller(DashboardController::class)->group(function () {
+        Route::get('dashboard', 'index')->name('dashboard');
+    });
+
+    Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->group(function () {
+        Route::get('edit', 'edit')->name('edit');
+        Route::post('details', 'details')->name('details');
+        Route::post('picture', 'picture')->name('picture');
+        Route::post('password', 'password')->name('password');
+    });
+
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('categories', 'index')->name('categories');
+        Route::prefix('category')->name('category.')->group(function () {
+            Route::get('create', 'create')->name('create');
+            Route::post('create', 'store');
+            Route::get('{category}/edit', 'edit')->name('edit');
+            Route::post('{category}/edit', 'update');
+            Route::get('{category}/destroy', 'destroy')->name('destroy');
+        });
+    });
+});

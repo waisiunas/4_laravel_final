@@ -1,12 +1,12 @@
 @extends('layouts.admin.main')
 
-@section('title', 'Dashboard')
+@section('title', 'Title')
 
 @section('content')
     <main class="content">
         <div class="container-fluid p-0">
 
-            <h1 class="h3 mb-3">Dashboard</h1>
+            <h1 class="h3 mb-3">Heading</h1>
 
             <div class="row">
                 <div class="col-12">
