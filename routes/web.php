@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ProfileController;
+use App\Http\Controllers\admin\VendorController;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\RedirectIfAuthenticated;
@@ -50,6 +52,28 @@ Route::prefix('admin')->name('admin.')->middleware(Authenticate::class)->group(f
             Route::get('{category}/edit', 'edit')->name('edit');
             Route::post('{category}/edit', 'update');
             Route::get('{category}/destroy', 'destroy')->name('destroy');
+        });
+    });
+
+    Route::controller(BrandController::class)->group(function () {
+        Route::get('brands', 'index')->name('brands');
+        Route::prefix('brand')->name('brand.')->group(function () {
+            Route::get('create', 'create')->name('create');
+            Route::post('create', 'store');
+            Route::get('{brand}/edit', 'edit')->name('edit');
+            Route::post('{brand}/edit', 'update');
+            Route::get('{brand}/destroy', 'destroy')->name('destroy');
+        });
+    });
+
+    Route::controller(VendorController::class)->group(function () {
+        Route::get('vendors', 'index')->name('vendors');
+        Route::prefix('vendor')->name('vendor.')->group(function () {
+            Route::get('create', 'create')->name('create');
+            Route::post('create', 'store');
+            Route::get('{vendor}/edit', 'edit')->name('edit');
+            Route::post('{vendor}/edit', 'update');
+            Route::get('{vendor}/destroy', 'destroy')->name('destroy');
         });
     });
 });

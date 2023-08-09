@@ -16,6 +16,18 @@
                     <i class="align-middle" data-feather="book"></i> <span class="align-middle">Categories</span>
                 </a>
             </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{ route('admin.brands') }}">
+                    <i class="align-middle" data-feather="book"></i> <span class="align-middle">Brands</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{ route('admin.vendors') }}">
+                    <i class="align-middle" data-feather="book"></i> <span class="align-middle">Vendors</span>
+                </a>
+            </li>
         </ul>
     </div>
 </nav>
