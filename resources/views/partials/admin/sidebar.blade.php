@@ -28,6 +28,12 @@
                     <i class="align-middle" data-feather="book"></i> <span class="align-middle">Vendors</span>
                 </a>
             </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{ route('admin.products') }}">
+                    <i class="align-middle" data-feather="book"></i> <span class="align-middle">Products</span>
+                </a>
+            </li>
         </ul>
     </div>
 </nav>

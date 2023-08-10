@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProfileController;
 use App\Http\Controllers\admin\VendorController;
 use App\Http\Controllers\auth\AuthController;
@@ -71,9 +72,22 @@ Route::prefix('admin')->name('admin.')->middleware(Authenticate::class)->group(f
         Route::prefix('vendor')->name('vendor.')->group(function () {
             Route::get('create', 'create')->name('create');
             Route::post('create', 'store');
+            Route::get('{vendor}/show', 'show')->name('show');
             Route::get('{vendor}/edit', 'edit')->name('edit');
             Route::post('{vendor}/edit', 'update');
             Route::get('{vendor}/destroy', 'destroy')->name('destroy');
+        });
+    });
+
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('products', 'index')->name('products');
+        Route::prefix('product')->name('product.')->group(function () {
+            Route::get('create', 'create')->name('create');
+            Route::post('create', 'store');
+            Route::get('{product}/show', 'show')->name('show');
+            Route::get('{product}/edit', 'edit')->name('edit');
+            Route::post('{product}/edit', 'update');
+            Route::get('{product}/destroy', 'destroy')->name('destroy');
         });
     });
 });

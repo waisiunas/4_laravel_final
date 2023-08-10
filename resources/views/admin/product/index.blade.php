@@ -1,6 +1,6 @@
 @extends('layouts.admin.main')
 
-@section('title', 'Vendors')
+@section('title', 'Products')
 
 @section('content')
     <main class="content">
@@ -8,10 +8,10 @@
 
             <div class="row">
                 <div class="col-6">
-                    <h1 class="h3 mb-3">Vendors</h1>
+                    <h1 class="h3 mb-3">Products</h1>
                 </div>
                 <div class="col-6 text-end">
-                    <a href="{{ route('admin.vendor.create') }}" class="btn btn-outline-primary">Add Vendor</a>
+                    <a href="{{ route('admin.product.create') }}" class="btn btn-outline-primary">Add Product</a>
                 </div>
             </div>
 
@@ -20,38 +20,40 @@
                     <div class="card">
                         <div class="card-body">
                             @include('partials.alerts')
-                            @if (count($vendors) > 0)
+                            @if (count($products) > 0)
                                 <table class="table table-bordered m-0">
                                     <thead>
                                         <tr>
                                             <th>Sr. No</th>
-                                            <th>Company Name</th>
-                                            <th>Person Name</th>
-                                            <th>Email</th>
-                                            <th>Phone Number</th>
+                                            <th>Category</th>
+                                            <th>Brand</th>
+                                            <th>Product Name</th>
+                                            {{-- <th>Image</th> --}}
                                             <th>Action</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        @foreach ($vendors as $vendor)
+                                        @foreach ($products as $product)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $vendor->company_name }}</td>
+                                                <td>{{ $product->category->name }}</td>
+                                                <td>{{ $product->brand->name }}</td>
+                                                <td>{{ $product->name }}</td>
+                                                {{-- <td>
+                                                    <img src="{{ asset('template/img/products/' . $product->image) }}"
+                                                        alt="" width="100">
+                                                </td> --}}
                                                 <td>
-                                                    {{ $vendor->title . ' ' . $vendor->first_name . $vendor->last_name }}
-                                                </td>
-                                                <td>{{ $vendor->email }}</td>
-                                                <td>{{ $vendor->phone_no }}</td>
-                                                <td>
-                                                    <a href="{{ route('admin.vendor.edit', $vendor) }}"
+                                                    <a href="{{ route('admin.product.edit', $product) }}"
                                                         class="btn btn-primary">
                                                         <i class="align-middle" data-feather="edit"></i>
                                                     </a>
-                                                    <a href="{{ route('admin.vendor.show', $vendor) }}" class="btn btn-info">
+                                                    <a href="{{ route('admin.product.show', $product) }}"
+                                                        class="btn btn-info">
                                                         <i class="align-middle" data-feather="eye"></i>
                                                     </a>
-                                                    <a href="{{ route('admin.vendor.destroy', $vendor) }}"
+                                                    <a href="{{ route('admin.product.destroy', $product) }}"
                                                         class="btn btn-danger">
                                                         <i class="align-middle" data-feather="trash"></i>
                                                     </a>
