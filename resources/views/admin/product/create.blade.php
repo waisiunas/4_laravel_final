@@ -29,6 +29,10 @@
                                             <label for="category_id" class="form-label">Category</label>
                                             <select class="form-select @error('category_id') is-invalid @enderror"
                                                 name="category_id" id="category_id">
+                                                <option value="-1">
+                                                    &#43;
+                                                    Add New Category
+                                                </option>
                                                 <option value="" selected>Select category</option>
 
                                                 @foreach ($categories as $category)
@@ -48,6 +52,10 @@
                                             <label for="brand_id" class="form-label">Brand</label>
                                             <select class="form-select @error('brand_id') is-invalid @enderror"
                                                 name="brand_id" id="brand_id">
+                                                <option value="-1">
+                                                    &#43;
+                                                    Add New Brand
+                                                </option>
                                                 <option value="" selected>Select brand</option>
 
                                                 @foreach ($brands as $brand)
@@ -114,4 +122,12 @@
 
         </div>
     </main>
+
+    @include('partials.admin.modals')
+
+
+@endsection
+
+@section('script')
+    <script src="{{ asset('template/js/custom.js') }}"></script>
 @endsection

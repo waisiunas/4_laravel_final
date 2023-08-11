@@ -37,6 +37,8 @@
 
     <script src="{{ asset('template/js/app.js') }}"></script>
 
+    @yield('script')
+
 </body>
 
 </html>
