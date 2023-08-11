@@ -72,7 +72,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return view('admin.product.show', [
+            'product' => $product,
+        ]);
     }
 
     /**
@@ -80,7 +82,11 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return view('admin.product.edit', [
+            'categories' => Category::all(),
+            'brands' => Brand::all(),
+            'product' => $product,
+        ]);
     }
 
     /**
@@ -88,7 +94,48 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $request->validate([
+            'category_id' => ['required'],
+            'brand_id' => ['required'],
+            'name' => ['required'],
+            'description' => ['required'],
+        ]);
+
+        $data = [
+            'category_id' => $request->category_id,
+            'brand_id' => $request->brand_id,
+            'name' => $request->name,
+            'description' => $request->description,
+        ];
+
+        $is_updated = $product->update($data);
+
+        $message = $is_updated ? ['success' => 'Magic has been spelled!'] : ['failure' => 'Magic has become a shopper!'];
+
+        return back()->with($message);
+    }
+
+    public function picture(Request $request, Product $product)
+    {
+        $request->validate([
+            'image' => ['required', 'image', 'mimes:png,jpg,jpeg'],
+        ]);
+
+        unlink(public_path('template/img/products/' . $product->image));
+
+        $new_name = "INV_PRO" . microtime(true) . "." . $request->image->extension();
+
+        $request->image->move(public_path('template/img/products'), $new_name);
+
+        $data = [
+            'image' => $new_name,
+        ];
+
+        $is_updated = $product->update($data);
+
+        $message = $is_updated ? ['success' => 'Magic has been spelled!'] : ['failure' => 'Magic has become a shopper!'];
+
+        return back()->with($message);
     }
 
     /**
@@ -96,6 +143,10 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $is_deleted = $product->delete();
+
+        $is_deleted ? $message = ['success' => 'Magic has been spelled!'] : $message = ['failure' => 'Magic has become shopper!'];
+
+        return back()->with($message);
     }
 }

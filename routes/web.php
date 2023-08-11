@@ -86,6 +86,7 @@ Route::prefix('admin')->name('admin.')->middleware(Authenticate::class)->group(f
             Route::post('create', 'store');
             Route::get('{product}/show', 'show')->name('show');
             Route::get('{product}/edit', 'edit')->name('edit');
+            Route::post('{product}/picture', 'picture')->name('picture');
             Route::post('{product}/edit', 'update');
             Route::get('{product}/destroy', 'destroy')->name('destroy');
         });
