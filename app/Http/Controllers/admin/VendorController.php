@@ -62,7 +62,7 @@ class VendorController extends Controller
 
         $is_created = Vendor::create($data);
 
-        $message = $is_created ? ['success' => 'Vendor added Successfully!'] : ['failure' => 'Magic has become a shopper!'];
+        $message = $is_created ? ['success' => 'Magic has been spelled'] : ['failure' => 'Magic has become a shopper!'];
 
         return back()->with($message);
     }

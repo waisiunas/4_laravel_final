@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProfileController;
+use App\Http\Controllers\admin\PurchaseOrderController;
 use App\Http\Controllers\admin\VendorController;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Middleware\Authenticate;
@@ -89,6 +90,18 @@ Route::prefix('admin')->name('admin.')->middleware(Authenticate::class)->group(f
             Route::post('{product}/picture', 'picture')->name('picture');
             Route::post('{product}/edit', 'update');
             Route::get('{product}/destroy', 'destroy')->name('destroy');
+        });
+    });
+
+    Route::controller(PurchaseOrderController::class)->group(function () {
+        Route::get('purchase_orders', 'index')->name('purchase_orders');
+        Route::prefix('purchase_order')->name('purchase_order.')->group(function () {
+            Route::get('create', 'create')->name('create');
+            Route::post('create', 'store');
+            Route::get('{purchase_order}/show', 'show')->name('show');
+            Route::get('{purchase_order}/edit', 'edit')->name('edit');
+            Route::post('{purchase_order}/edit', 'update');
+            Route::get('{purchase_order}/destroy', 'destroy')->name('destroy');
         });
     });
 });
