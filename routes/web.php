@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\DynamicController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProfileController;
 use App\Http\Controllers\admin\PurchaseOrderController;
@@ -103,5 +104,10 @@ Route::prefix('admin')->name('admin.')->middleware(Authenticate::class)->group(f
             Route::post('{purchase_order}/edit', 'update');
             Route::get('{purchase_order}/destroy', 'destroy')->name('destroy');
         });
+    });
+
+    Route::controller(DynamicController::class)->group(function () {
+        Route::post('add_category', 'add_category')->name('add_category');
+        Route::post('fetch_categories', 'fetch_categories')->name('fetch_categories');
     });
 });

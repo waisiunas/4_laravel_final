@@ -130,4 +130,80 @@
 
 @section('script')
     <script src="{{ asset('template/js/custom.js') }}"></script>
+    <script>
+        const categoryFormElement = document.getElementById("category-form");
+        const categoryErrorElement = document.getElementById("category-error");
+
+        categoryFormElement.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const categoryNameElement = document.getElementById("category_name");
+
+            let categoryNameValue = categoryNameElement.value;
+
+            categoryErrorElement.innerText = "";
+            categoryNameElement.classList.remove("is-invalid");
+
+            if (categoryNameValue == "") {
+                categoryErrorElement.innerText = "Enter the category name!";
+                categoryNameElement.classList.add("is-invalid");
+            } else {
+                const token = document.querySelector("input[name='_token']").value;
+
+                const data = {
+                    name: categoryNameValue,
+                    _token: token,
+                };
+
+                fetch("{{ route('admin.add_category') }}", {
+                        method: "POST",
+                        body: JSON.stringify(data),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    })
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(result) {
+                        categoryNameElement.value = '';
+
+                        const newModal = document.getElementById("categoryModal");
+                        newModal.classList.remove('show');
+                        newModal.style.display = 'none';
+                        newModal.removeAttribute('aria-modal');
+                        newModal.removeAttribute('role');
+                        newModal.setAttribute('aria-hidden', true);
+
+                        // const modal = new bootstrap.Modal(
+                        //     document.getElementById("categoryModal")
+                        // );
+                        // modal._scrollBar._element = hi;
+                        // console.log(modal);
+
+                        // document.getElementById("categoryModal").modal('hide');
+
+                        const data = {
+                            id: result,
+                            _token: token,
+                        };
+
+                        fetch("{{ route('admin.fetch_categories') }}", {
+                                method: "POST",
+                                body: JSON.stringify(data),
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                            })
+                            .then(function(response) {
+                                return response.json();
+                            })
+                            .then(function(result) {
+                                const categoryIdElement = document.getElementById('category_id');
+                                categoryIdElement.innerHTML = result;
+                            });
+                    });
+            }
+        });
+    </script>
 @endsection

@@ -7,16 +7,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="" method="POST">
+                <form id="category-form">
                     @csrf
                     <div class="mb-3">
                         <label for="category_name" class="form-label">Category Name</label>
-                        <input type="text" class="form-control @error('category_name') is-invalid @enderror"
-                            name="category_name" id="category_name" placeholder="Enter the category name!"
-                            value="{{ old('category_name') }}">
-                        @error('category_name')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
+                        <input type="text" class="form-control" name="category_name" id="category_name"
+                            placeholder="Enter the category name!" value="{{ old('category_name') }}">
+                        <div id="category-error" class="text-danger"></div>
                     </div>
 
                     <div>
@@ -40,7 +37,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="" method="POST">
+                <form id="brand-form">
                     @csrf
                     <div class="mb-3">
                         <label for="brand_name" class="form-label">Brand Name</label>
