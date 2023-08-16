@@ -109,5 +109,8 @@ Route::prefix('admin')->name('admin.')->middleware(Authenticate::class)->group(f
     Route::controller(DynamicController::class)->group(function () {
         Route::post('add_category', 'add_category')->name('add_category');
         Route::post('fetch_categories', 'fetch_categories')->name('fetch_categories');
+
+        Route::post('add_brand', 'add_brand')->name('add_brand');
+        Route::post('fetch_brands', 'fetch_brands')->name('fetch_brands');
     });
 });

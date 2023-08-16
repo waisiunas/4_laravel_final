@@ -124,8 +124,6 @@
     </main>
 
     @include('partials.admin.modals')
-
-
 @endsection
 
 @section('script')
@@ -166,42 +164,113 @@
                         return response.json();
                     })
                     .then(function(result) {
-                        categoryNameElement.value = '';
+                        if (result.categoryAlreadyExists) {
+                            categoryErrorElement.innerText = result.categoryAlreadyExists;
+                            categoryNameElement.classList.add("is-invalid");
+                        } else {
+                            categoryNameElement.value = '';
 
-                        const newModal = document.getElementById("categoryModal");
-                        newModal.classList.remove('show');
-                        newModal.style.display = 'none';
-                        newModal.removeAttribute('aria-modal');
-                        newModal.removeAttribute('role');
-                        newModal.setAttribute('aria-hidden', true);
+                            const newModal = document.getElementById("categoryModal");
+                            newModal.classList.remove('show');
+                            newModal.style.display = 'none';
+                            newModal.removeAttribute('aria-modal');
+                            newModal.removeAttribute('role');
+                            newModal.setAttribute('aria-hidden', true);
+                            document.querySelector(".modal-backdrop").remove();
 
-                        // const modal = new bootstrap.Modal(
-                        //     document.getElementById("categoryModal")
-                        // );
-                        // modal._scrollBar._element = hi;
-                        // console.log(modal);
+                            const data = {
+                                id: result,
+                                _token: token,
+                            };
 
-                        // document.getElementById("categoryModal").modal('hide');
+                            fetch("{{ route('admin.fetch_categories') }}", {
+                                    method: "POST",
+                                    body: JSON.stringify(data),
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                })
+                                .then(function(response) {
+                                    return response.json();
+                                })
+                                .then(function(result) {
+                                    const categoryIdElement = document.getElementById('category_id');
+                                    categoryIdElement.innerHTML = result;
+                                });
+                        }
+                    });
+            }
+        });
 
-                        const data = {
-                            id: result,
-                            _token: token,
-                        };
+        const brandFormElement = document.getElementById("brand-form");
+        const brandErrorElement = document.getElementById("brand-error");
 
-                        fetch("{{ route('admin.fetch_categories') }}", {
-                                method: "POST",
-                                body: JSON.stringify(data),
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                            })
-                            .then(function(response) {
-                                return response.json();
-                            })
-                            .then(function(result) {
-                                const categoryIdElement = document.getElementById('category_id');
-                                categoryIdElement.innerHTML = result;
-                            });
+        brandFormElement.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const brandNameElement = document.getElementById("brand_name");
+
+            let brandNameValue = brandNameElement.value;
+
+            brandErrorElement.innerText = "";
+            brandNameElement.classList.remove("is-invalid");
+
+            if (brandNameValue == "") {
+                brandErrorElement.innerText = "Enter the brand name!";
+                brandNameElement.classList.add("is-invalid");
+            } else {
+                const token = document.querySelector("input[name='_token']").value;
+
+                const data = {
+                    name: brandNameValue,
+                    _token: token,
+                };
+
+                fetch("{{ route('admin.add_brand') }}", {
+                        method: "POST",
+                        body: JSON.stringify(data),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    })
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(result) {
+                        if (result.categoryAlreadyExists) {
+                            brandErrorElement.innerText = result.categoryAlreadyExists;
+                            brandNameElement.classList.add("is-invalid");
+                        } else {
+                            brandNameElement.value = '';
+
+                            const newModal = document.getElementById("brandModal");
+                            newModal.classList.remove('show');
+                            newModal.style.display = 'none';
+                            newModal.removeAttribute('aria-modal');
+                            newModal.removeAttribute('role');
+                            newModal.setAttribute('aria-hidden', true);
+                            document.querySelector(".modal-backdrop").remove();
+
+                            const data = {
+                                id: result,
+                                _token: token,
+                            };
+
+                            fetch("{{ route('admin.fetch_brands') }}", {
+                                    method: "POST",
+                                    body: JSON.stringify(data),
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                })
+                                .then(function(response) {
+                                    return response.json();
+                                })
+                                .then(function(result) {
+                                    const brandIdElement = document.getElementById('brand_id');
+                                    brandIdElement.innerHTML = result;
+                                });
+                        }
                     });
             }
         });

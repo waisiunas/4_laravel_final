@@ -29,6 +29,10 @@
                                             <label for="category_id" class="form-label">Category</label>
                                             <select class="form-select @error('category_id') is-invalid @enderror"
                                                 name="category_id" id="category_id">
+                                                <option value="-1">
+                                                    &#43;
+                                                    Add New Category
+                                                </option>
                                                 <option value="" selected>Select category</option>
 
                                                 @if (old('category_id'))
@@ -64,6 +68,10 @@
                                             <label for="brand_id" class="form-label">Brand</label>
                                             <select class="form-select @error('brand_id') is-invalid @enderror"
                                                 name="brand_id" id="brand_id">
+                                                <option value="-1">
+                                                    &#43;
+                                                    Add New Brand
+                                                </option>
                                                 <option value="" selected>Select brand</option>
 
                                                 @if (old('brand_id'))
@@ -156,4 +164,156 @@
             </div>
         </div>
     </main>
+    @include('partials.admin.modals')
+@endsection
+
+@section('script')
+    <script src="{{ asset('template/js/custom.js') }}"></script>
+    <script>
+        const categoryFormElement = document.getElementById("category-form");
+        const categoryErrorElement = document.getElementById("category-error");
+
+        categoryFormElement.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const categoryNameElement = document.getElementById("category_name");
+
+            let categoryNameValue = categoryNameElement.value;
+
+            categoryErrorElement.innerText = "";
+            categoryNameElement.classList.remove("is-invalid");
+
+            if (categoryNameValue == "") {
+                categoryErrorElement.innerText = "Enter the category name!";
+                categoryNameElement.classList.add("is-invalid");
+            } else {
+                const token = document.querySelector("input[name='_token']").value;
+
+                const data = {
+                    name: categoryNameValue,
+                    _token: token,
+                };
+
+                fetch("{{ route('admin.add_category') }}", {
+                        method: "POST",
+                        body: JSON.stringify(data),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    })
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(result) {
+                        if (result.categoryAlreadyExists) {
+                            categoryErrorElement.innerText = result.categoryAlreadyExists;
+                            categoryNameElement.classList.add("is-invalid");
+                        } else {
+                            categoryNameElement.value = '';
+
+                            const newModal = document.getElementById("categoryModal");
+                            newModal.classList.remove('show');
+                            newModal.style.display = 'none';
+                            newModal.removeAttribute('aria-modal');
+                            newModal.removeAttribute('role');
+                            newModal.setAttribute('aria-hidden', true);
+                            document.querySelector(".modal-backdrop").remove();
+
+                            const data = {
+                                id: result,
+                                _token: token,
+                            };
+
+                            fetch("{{ route('admin.fetch_categories') }}", {
+                                    method: "POST",
+                                    body: JSON.stringify(data),
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                })
+                                .then(function(response) {
+                                    return response.json();
+                                })
+                                .then(function(result) {
+                                    const categoryIdElement = document.getElementById('category_id');
+                                    categoryIdElement.innerHTML = result;
+                                });
+                        }
+                    });
+            }
+        });
+
+        const brandFormElement = document.getElementById("brand-form");
+        const brandErrorElement = document.getElementById("brand-error");
+
+        brandFormElement.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const brandNameElement = document.getElementById("brand_name");
+
+            let brandNameValue = brandNameElement.value;
+
+            brandErrorElement.innerText = "";
+            brandNameElement.classList.remove("is-invalid");
+
+            if (brandNameValue == "") {
+                brandErrorElement.innerText = "Enter the brand name!";
+                brandNameElement.classList.add("is-invalid");
+            } else {
+                const token = document.querySelector("input[name='_token']").value;
+
+                const data = {
+                    name: brandNameValue,
+                    _token: token,
+                };
+
+                fetch("{{ route('admin.add_brand') }}", {
+                        method: "POST",
+                        body: JSON.stringify(data),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    })
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(result) {
+                        if (result.categoryAlreadyExists) {
+                            brandErrorElement.innerText = result.categoryAlreadyExists;
+                            brandNameElement.classList.add("is-invalid");
+                        } else {
+                            brandNameElement.value = '';
+
+                            const newModal = document.getElementById("brandModal");
+                            newModal.classList.remove('show');
+                            newModal.style.display = 'none';
+                            newModal.removeAttribute('aria-modal');
+                            newModal.removeAttribute('role');
+                            newModal.setAttribute('aria-hidden', true);
+                            document.querySelector(".modal-backdrop").remove();
+
+                            const data = {
+                                id: result,
+                                _token: token,
+                            };
+
+                            fetch("{{ route('admin.fetch_brands') }}", {
+                                    method: "POST",
+                                    body: JSON.stringify(data),
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                })
+                                .then(function(response) {
+                                    return response.json();
+                                })
+                                .then(function(result) {
+                                    const brandIdElement = document.getElementById('brand_id');
+                                    brandIdElement.innerHTML = result;
+                                });
+                        }
+                    });
+            }
+        });
+    </script>
 @endsection

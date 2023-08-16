@@ -12,7 +12,7 @@
                     <div class="mb-3">
                         <label for="category_name" class="form-label">Category Name</label>
                         <input type="text" class="form-control" name="category_name" id="category_name"
-                            placeholder="Enter the category name!" value="{{ old('category_name') }}">
+                            placeholder="Enter the category name!">
                         <div id="category-error" class="text-danger"></div>
                     </div>
 
@@ -41,12 +41,9 @@
                     @csrf
                     <div class="mb-3">
                         <label for="brand_name" class="form-label">Brand Name</label>
-                        <input type="text" class="form-control @error('brand_name') is-invalid @enderror"
-                            name="brand_name" id="brand_name" placeholder="Enter the brand name!"
-                            value="{{ old('brand_name') }}">
-                        @error('brand_name')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
+                        <input type="text" class="form-control" name="brand_name" id="brand_name"
+                            placeholder="Enter the brand name!">
+                        <div id="brand-error" class="text-danger"></div>
                     </div>
 
                     <div>
