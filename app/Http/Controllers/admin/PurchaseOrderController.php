@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\PurchaseOrder;
 use App\Models\Vendor;
@@ -72,9 +73,34 @@ class PurchaseOrderController extends Controller
 
         $is_created = PurchaseOrder::create($data);
 
-        $message = $is_created ? ['success' => 'Magic has been spelled'] : ['failure' => 'Magic has become a shopper!'];
+        if ($is_created) {
+            $is_already_exists = Inventory::where('product_id', $request->product_id)->first();
+            if ($is_already_exists) {
+                $data = [
+                    'total_quantity' => $is_already_exists->total_quantity + $request->quantity,
+                    'current_quantity' => $is_already_exists->current_quantity + $request->quantity,
+                ];
 
-        return back()->with($message);
+                $is_updated = $is_already_exists->update($data);
+
+                $message = $is_updated ? ['success' => 'Magic has been spelled'] : ['failure' => 'Magic has become a shopper!'];
+
+                return back()->with($message);
+            } else {
+
+                $data = [
+                    'product_id' => $request->product_id,
+                    'total_quantity' => $request->quantity,
+                    'current_quantity' => $request->quantity,
+                ];
+
+                $is_created = Inventory::create($data);
+
+                $message = $is_created ? ['success' => 'Magic has been spelled'] : ['failure' => 'Magic has become a shopper!'];
+
+                return back()->with($message);
+            }
+        }
     }
 
     /**

@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\DynamicController;
+use App\Http\Controllers\admin\InventoryController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProfileController;
 use App\Http\Controllers\admin\PurchaseOrderController;
@@ -112,5 +113,14 @@ Route::prefix('admin')->name('admin.')->middleware(Authenticate::class)->group(f
 
         Route::post('add_brand', 'add_brand')->name('add_brand');
         Route::post('fetch_brands', 'fetch_brands')->name('fetch_brands');
+    });
+
+    Route::controller(InventoryController::class)->group(function () {
+        Route::get('inventory', 'index')->name('inventory');
+        Route::prefix('inventory')->name('inventory.')->group(function () {
+            Route::get('{inventory}/edit', 'edit')->name('edit');
+            Route::post('{inventory}/edit_quantity', 'update_quantity')->name('edit_quantity');
+            Route::post('{inventory}/edit_location', 'update_location')->name('edit_location');
+        });
     });
 });

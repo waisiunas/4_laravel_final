@@ -20,4 +20,10 @@ class Inventory extends Model
         'rack_no',
         'shelf_no',
     ];
+
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }
