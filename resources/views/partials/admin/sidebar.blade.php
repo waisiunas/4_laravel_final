@@ -42,6 +42,18 @@
             </li>
 
             <li class="sidebar-item">
+                <a class="sidebar-link" href="{{ route('admin.customers') }}">
+                    <i class="align-middle" data-feather="book"></i> <span class="align-middle">Customers</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{ route('admin.sale_orders') }}">
+                    <i class="align-middle" data-feather="book"></i> <span class="align-middle">Sale Orders</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('admin.inventory') }}">
                     <i class="align-middle" data-feather="book"></i> <span class="align-middle">Inventory</span>
                 </a>

@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\CustomerController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\DynamicController;
 use App\Http\Controllers\admin\InventoryController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProfileController;
 use App\Http\Controllers\admin\PurchaseOrderController;
+use App\Http\Controllers\admin\SaleOrderController;
 use App\Http\Controllers\admin\VendorController;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Middleware\Authenticate;
@@ -113,6 +115,25 @@ Route::prefix('admin')->name('admin.')->middleware(Authenticate::class)->group(f
 
         Route::post('add_brand', 'add_brand')->name('add_brand');
         Route::post('fetch_brands', 'fetch_brands')->name('fetch_brands');
+    });
+
+    Route::controller(CustomerController::class)->group(function () {
+        Route::get('customers', 'index')->name('customers');
+        Route::prefix('customer')->name('customer.')->group(function () {
+            Route::get('create', 'create')->name('create');
+            Route::post('create', 'store');
+            Route::get('{customer}/edit', 'edit')->name('edit');
+            Route::post('{customer}/edit', 'update');
+            Route::get('{customer}/destroy', 'destroy')->name('destroy');
+        });
+    });
+
+    Route::controller(SaleOrderController::class)->group(function () {
+        Route::get('sale_orders', 'index')->name('sale_orders');
+        Route::prefix('sale_order')->name('sale_order.')->group(function () {
+            Route::get('create', 'create')->name('create');
+            Route::post('create', 'store');
+        });
     });
 
     Route::controller(InventoryController::class)->group(function () {

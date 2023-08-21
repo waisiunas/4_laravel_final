@@ -1,6 +1,6 @@
 @extends('layouts.admin.main')
 
-@section('title', 'Inventory')
+@section('title', 'Customers')
 
 @section('content')
     <main class="content">
@@ -8,7 +8,10 @@
 
             <div class="row">
                 <div class="col-6">
-                    <h1 class="h3 mb-3">Inventory</h1>
+                    <h1 class="h3 mb-3">Customers</h1>
+                </div>
+                <div class="col-6 text-end">
+                    <a href="{{ route('admin.customer.create') }}" class="btn btn-outline-primary">Add Customer</a>
                 </div>
             </div>
 
@@ -17,37 +20,33 @@
                     <div class="card">
                         <div class="card-body">
                             @include('partials.alerts')
-                            @if (count($inventories) > 0)
+                            @if (count($customers) > 0)
                                 <table class="table table-bordered m-0">
                                     <thead>
                                         <tr>
                                             <th>Sr. No</th>
-                                            <th>Product</th>
-                                            <th>Current Qty.</th>
-                                            <th>Sold Qty.</th>
-                                            <th>Damaged Qty.</th>
-                                            <th>Total Qty.</th>
-                                            <th>Location</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone Number</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        @foreach ($inventories as $inventory)
+                                        @foreach ($customers as $customer)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $inventory->product->name }}</td>
-                                                <td>{{ $inventory->current_quantity }}</td>
-                                                <td>{{ $inventory->sold_quantity ?? "NILL" }}</td>
-                                                <td>{{ $inventory->damaged_quantity ?? "NILL" }}</td>
-                                                <td>{{  $inventory->total_quantity }}</td>
+                                                <td>{{ $customer->name }}</td>
+                                                <td>{{ $customer->email }}</td>
+                                                <td>{{ $customer->phone_no }}</td>
                                                 <td>
-                                                    {{ "W: " . $inventory->wall_no . ", Sc: " . $inventory->section . ", R: " . $inventory->rack_no . ", Sh: " . $inventory->shelf_no  }}
-                                                </td>
-                                                <td>
-                                                    <a href="{{ route('admin.inventory.edit', $inventory) }}"
+                                                    <a href="{{ route('admin.customer.edit', $customer) }}"
                                                         class="btn btn-primary">
                                                         <i class="align-middle" data-feather="edit"></i>
+                                                    </a>
+                                                    <a href="{{ route('admin.customer.destroy', $customer) }}"
+                                                        class="btn btn-danger">
+                                                        <i class="align-middle" data-feather="trash"></i>
                                                     </a>
                                                 </td>
                                             </tr>
